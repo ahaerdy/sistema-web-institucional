@@ -1,0 +1,64 @@
+Options All -Indexes
+
+RewriteEngine On
+
+RewriteRule ^(.+)\.png$ download.php
+RewriteRule ^(.+)\.jpg$ download.php
+RewriteRule ^(.+)\.JPG$ download.php
+#RewriteRule ^(.+)\.jpeg$ download.php
+#RewriteRule ^(.+)\.JPEG$ download.php
+RewriteRule ^(.+)\.flv$ download.php
+#RewriteRule ^(.+)\.mp4$ download.php
+RewriteRule ^(.+)\.mp3$ download.php
+RewriteRule ^(.+)\.pptx$ download.php
+RewriteRule ^(.+)\.ppt$ download.php
+RewriteRule ^(.+)\.zip$ download.php
+RewriteRule ^(.+)\.rar$ download.php
+
+RewriteEngine On
+RewriteCond %{HTTP_HOST} !^www\.
+RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Force https:// for all except some selected URLs    
+RewriteCond %{HTTPS} off
+RewriteCond %{THE_REQUEST} !/(retorno_pagseguro.php|retorno_paypal.php|hello.php|hello2.php|cria_pagamentos.php|processa-escalonamento.php|volta-escalonamento.php) [NC]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Force http:// for selected URLs
+RewriteCond %{HTTPS} on
+RewriteCond %{THE_REQUEST} /(retorno_pagseguro.php|retorno_paypal.php|hello.php|hello2.php|cria_pagamentos.php|processa-escalonamento.php|volta-escalonamento.php) [NC]
+RewriteRule ^ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Enabling for android/ipad/iphone/BlackBerry/Nokia/Samsung/Windows Phones
+ RewriteCond %{HTTP_USER_AGENT} !(Android|iPad|iPhone|BlackBerry|Nokia|SAMSUNG|Windows\ Phone) [NC] 
+ RewriteCond %{HTTP_REFERER} !^https://(www\.)?jessenios.net [NC] 
+ RewriteCond %{HTTP_REFERER} !^https://(www\.)?jessenios.net.*$ [NC] 
+ RewriteRule \.(mp4)$ - [F,NC]
+
+# Bloqueio de URLs específicas - HTTPS
+RewriteCond %{HTTP_REFERER} !^https://(www\.)?jessenios.net [NC]
+RewriteCond %{HTTP_REFERER} !^https://(www\.)?jessenios.net.*$ [NC]
+RewriteCond %{REQUEST_URI} ^(.+)/(dialog.php|js|includes|logar.php)/?$
+RewriteRule ^(adm/sj)(.*) - [F]
+
+# Permite acesso local através do Lynx (cron) e bloqueia acesso externo via URL (arquivos específicos)
+#<FilesMatch "^(cria_pagamentos.php|processa-escalonamento.php|volta-escalonamento.php|hello.php)$">
+#	Order Deny,Allow
+#	Deny From All
+#	Allow From 64.37.49.148 64.37.51.156 64.37.51.157 64.37.51.158 127.0.0.1
+#</FilesMatch>
+
+
+# ErrorDocument 403 /403_error.html
+
+# Allow only GET and POST and disable HTTP/1.0. It also disables proxy requests.
+# RewriteEngine on
+# RewriteCond %{THE_REQUEST} !^(POST|GET)\ /.*\ HTTP/1\.1$ 
+# RewriteRule .* - [F]
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php55” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php55 .php .php5 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

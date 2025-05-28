@@ -1,0 +1,3 @@
+<?php
+session_start();
+require "functions/functions.php";if (isPost() && isXmlHttpRequest()):  require "db/config.inc.php";  Conectar();  $res = mysql_query("SELECT id, titulo FROM galerias WHERE id_topico = ".(int)getParam('topicId')." ORDER BY titulo ASC");  $r['qtd'] = mysql_num_rows($res);  $op.= '<option value=""> - Selecione - </option>';  while ($row = mysql_fetch_assoc($res)):    $sel = ((int)getParam('selectedId') == $row["id"])?'selected="selected"':'';    $op.= '<option value="'.$row["id"].'" '.$sel.'>'.$row["titulo"].'</option>';  endwhile;  $r['op'] = $op;  echo json_encode($r);endif;?>

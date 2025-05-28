@@ -1,0 +1,130 @@
+<?php validaGrupo(); ?>
+<?php if (getIdUsuario() > '3'): ?>
+  <?php
+    $idLeituraTotal = $_SESSION['login'][$_SESSION['login']['tipo']]['todos_id_le'];
+    $idLeituraTotal = explode(',', $idLeituraTotal);
+    if(empty($_SESSION['login']['iGrupo']) && !(int)$_SESSION['login']['iGrupo']):
+      $w1 = " gp.id  = ".$_SESSION['login']['usuario']['grupo_inicial'];
+      $w2 = " ((gp.id IN (".$_SESSION['login']['usuario']['todos_id_le'].") ) OR 
+               (gp.id IN (".$_SESSION['login']['usuario']['todos_id_dep_a'].") AND gp.id NOT IN (".$_SESSION['login']['usuario']['todos_id_le'].") AND at.compartilhado = 'S')) AND ";
+    else:
+      $w1 = ' gp.id  = '.(int)$_SESSION['login']['iGrupo'];
+      $w2 = " ((gp.id IN (".$_SESSION['login']['usuario']['todos_id_le'].") ) OR 
+               (gp.id IN (".$_SESSION['login']['usuario']['todos_id_dep_a'].") AND gp.id NOT IN (".$_SESSION['login']['usuario']['todos_id_le'].") AND at.compartilhado = 'S')) AND ";
+    endif;
+    $query = mysql_query("SELECT
+                              gp.nome      as grupo,
+                              gp.diretorio as gp_diretorio,
+                              tp.diretorio as tp_diretorio,
+                              at.diretorio as at_diretorio,
+                              at.id        as at_id,
+                              at.titulo    as at_nome,
+                              at.texto     as at_descricao,
+                              at.capa      as at_capa,
+                              date_format(at.cadastro,'%d/%m/%Y') as at_cadastro
+                            FROM 
+                              grupos  gp
+                              INNER JOIN topicos tp ON tp.id_grupo = gp.id 
+                              INNER JOIN artigos at ON at.id_topico = tp.id 
+                            WHERE
+                              ${w1} AND 
+                              ${w2}
+                              gp.ativo = 'S' AND 
+                              tp.ativo = 'S' AND 
+                              at.ativo = 'S' AND 
+                              at.home  = 'S'
+                            ORDER BY at_cadastro DESC 
+                            LIMIT 1") or die(mysql_error());
+    if(mysql_num_rows($query)):
+      while ($ln = mysql_fetch_assoc($query)):
+        echo '<div class="page-header title-article">
+                <h2>Artigo em destaque do grupo <small>('.$ln['grupo'].')</small></h2>
+              </div>';
+        echo $ln['at_descricao'];
+        echo '<hr>';
+        echo '<p>postado: '.$ln['at_cadastro'].'</p>';
+      endwhile;
+    else:
+      echo 'Nenhum artigo disponível!';
+    endif;
+  else:
+    require('pag_inicial_2.php');
+  endif;
+?>
+
+<div class="accordion" id="accordionR">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionR" href="#collapseR1">2.1-<span style="color:rgb(0, 0, 255)"><u>Cartas Astrosóficas</u></span></a>
+    </div>
+    <div class="accordion-body collapse" id="collapseR1">
+    <div class="accordion-inner">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=163"><u>2001 - Setembro de 2001 - Parte I - Herralôt para Consagração do Bhema de 1995</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=164"><u>2001 - Setembro de 2001 - Parte II</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=137"><u>2002 - Vulcano - Prólogo</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=138"><u>2002 - Vulcano 01</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=148"><u>2002 - Vulcano 02</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=149"><u>2002 - Vulcano 03</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=150"><u>2002 - Vulcano 04</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=151"><u>2002 - Vulcano 05</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=152"><u>2002 - Vulcano 06</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=153"><u>2002 - Vulcano 07</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=154"><u>2003 - Vulcano 08</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=155"><u>2003 - Vulcano 09</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=156"><u>2003 - Vulcano 10</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=143"><u>2003 - Marduk 7</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=142"><u>2003 - Marduk 8 e 9 - Consolamento</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=157"><u>2003 - Marduk 10 (ou SSS 01-Sacerdócio)</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=158"><u>2003 - SSS 02 - Serenidade</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=159"><u>2003 - SSS 03 - Solenidade</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=160"><u>2004 - SSS 04 - O Selo da Verdade</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=161"><u>2004 - SSS 05 - Salphia</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=162"><u>2004 - SSS 06 - História e Mito</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=141"><u>2006 - Boletim Astrosófico EA - Fevereiro de 2006</u></a><br>
+    &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=342"><u>2013 - Vulcano 2013</u></a></div>
+  </div>
+</div>
+
+<div class="accordion-group">
+<div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionR" href="#collapseR2">2.2-<span style="color:rgb(0, 0, 255)"><u>Cartas Hepacta</u></span> </a></div>
+
+<div class="accordion-body collapse" id="collapseR2">
+<div class="accordion-inner">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=187"><u>Hepacta 2004</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=165"><u>Hepacta 2005</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=188"><u>Hepacta 2006</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=166"><u>Hepacta 2007</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=184"><u>Hepacta 2008</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=168"><u>Hepacta 2009</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=169"><u>Hepacta 2010</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=167"><u>Hepacta 2011</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=147"><u>Hepacta 2012</u></a></div>
+</div>
+</div>
+
+
+<div class="accordion-group">
+<div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionR" href="#collapseR3">2.3-<span style="color:rgb(0, 0, 255)"><u>Cartas Pérola</u></span> </a></div>
+
+<div class="accordion-body collapse" id="collapseR3">
+<div class="accordion-inner">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=383"><u>Primeira Carta Pérola ao Rio de Janeiro (02/06/2013)</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=384"><u>Segunda Carta Pérola ao Rio de Janeiro (25/06/2013)</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=385"><u>Terceira Carta Pérola ao Rio de Janeiro (15/07/2013)</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=386"><u>Primeira Carta ao Pesquisador (25-09-2013)</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=387"><u>Primeira Carta Batismo (07-10-2013)</u></a></div>
+</div>
+</div>
+
+
+<div class="accordion-group" >
+<div class="accordion-heading"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionR" href="#collapseR4">2.4-<span style="color:rgb(0, 0, 255)"><u>Textos Diversos</u></span> </a></div>
+
+<div class="accordion-body collapse" id="collapseR4">
+<div class="accordion-inner">&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=347"><u>Os Dois Lados do Coração e a Doutrina do Som e da Luz (Ibny Joshai)</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=146"><u>Yoga Jessênia (Ibny Joshai, com comentários do Yogui Brahmananda) - Mar/2002</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=144"><u>O Consolo Curador do Graal (Ibny Joshai) - Jun/2003</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=140"><u>Carma, Ego e Registros Cármicos Microcósmicos (Ibny Joshai) - Dez/2003</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=145"><u>Silêncio: Um Alimento da Alma (Ibny Joshai) - Ago/2004</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=139"><u>A Senda do Batismo e do Ibnato Jessênio (Ibny Joshai) - Ago/2004</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=346"><u>Três Consciências: a do Aluno, a do Expositor e a do Pesquisador (Ibny Joshai) - Outubro de 2010</u></a><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <a href="http://www.jessenios.com.br/adm/sj/index.php?op=mostra_artigo&amp;artigo=194"><u>O Caminho do Deserto (Ibny Joshai) - Outubro de 2010</u></a></div>
+</div>
+</div>

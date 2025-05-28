@@ -1,0 +1,16 @@
+Options All -Indexes
+
+RewriteEngine On
+
+#RewriteRule ^(.+)\.png$ download.php
+RewriteRule ^(.+)\.jpg$ download.php
+RewriteRule ^(.+)\.JPG$ download.php
+RewriteRule ^(.+)\.jpeg$ download.php
+RewriteRule ^(.+)\.JPEG$ download.php
+RewriteRule ^(.+)\.flv$ download.php
+RewriteRule ^(.+)\.mp4$ download.php
+RewriteRule ^(.+)\.mp3$ download.php
+RewriteRule ^(.+)\.pptx$ download.php
+RewriteRule ^(.+)\.ppt$ download.php
+RewriteRule ^(.+)\.zip$ download.php
+RewriteRule ^(.+)\.rar$ download.php
