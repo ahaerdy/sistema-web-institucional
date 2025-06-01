@@ -20,7 +20,7 @@ Este repositório contém o código-fonte do portal institucional desenvolvido p
 - MySQL
 - Apache 2
 - CentOS Linux
-- CSS personalizado com fontes e ícones embutidos
+- CSS personalizado com fontes e ícones incorporados
 
 ## 📁 Estrutura do projeto
 
